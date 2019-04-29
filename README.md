@@ -5,7 +5,8 @@ Decorator pattern for deserializing unverified data to an instance of a class.
 </p>
 
 <p align="center">
-    <a href="https://github.com/reecemcd/ngx-form-resolver/blob/master/LICENSE" target="_blank"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="mit license" height="18"></a>
+    <a href="https://github.com/reecemcd/ts-deserializable/blob/master/LICENSE" target="_blank"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="mit license" height="18"></a>
+    <a href="https://circleci.com/gh/reecemcd/ts-deserializable" target="_blank"><img src="https://circleci.com/gh/reecemcd/ts-deserializable.svg?style=svg" alt="mit license" height="18"></a>
 </p>
 
 ## Table of contents
