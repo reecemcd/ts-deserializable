@@ -51,6 +51,7 @@ class User extends Deserializable {
 const user = new User().deserialize({});
 // user == { name: '', email: '' }
 
+
 /* Map examples */
 @DsClass().warn()
 class Group extends Deserializable {
@@ -64,6 +65,7 @@ class Group extends Deserializable {
 
 const group = new Group().deserialize({ title: 'My Group' });
 // group == { title: 'MyGroup!', users = [ {name: '', email: ''}, { name: '', email: ''} ]}
+
 
 /* Resolver examples */
 @DsClass().error()
