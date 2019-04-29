@@ -1,0 +1,26 @@
+{
+  "name": "ts-deserializable",
+  "version": "1.0.0",
+  "description": "Decorator pattern for deserializing unverified data to an instance of a class.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "copy-files": "copy .\\package.json .\\dist && copy .\\LICENSE .\\dist && copy .\\README.md .\\dist",
+    "build": "tsc",
+    "pack": "cd dist/ && npm pack",
+    "package": "npm run build && npm run copy-files && npm run pack"
+  },
+  "author": "Reece McDonald",
+  "license": "MIT",
+  "dependencies": {
+    "reflect-metadata": "^0.1.13",
+    "typescript": "^3.4.4"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.11",
+    "jest": "^24.7.1",
+    "ts-jest": "^24.0.2"
+  }
+}
