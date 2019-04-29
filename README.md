@@ -96,3 +96,7 @@ const formData = new MyFormData().deserialize({
 ## API
 
 coming soon...
+
+## TODO
+
+* Add operators that can report when data does not pass validation functions
