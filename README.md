@@ -1,7 +1,7 @@
 <h1 align="center">TS Deserializable</h1>
 
 <p align="center">
-Decorator pattern for deserializing unverified data to an instance of a class.
+Decorator pattern for deserializing unverified data to an instance of a class in typescript.
 </p>
 
 <p align="center">
@@ -22,7 +22,7 @@ Decorator pattern for deserializing unverified data to an instance of a class.
 
 ## Description
 
-TS-Deserializable is library that uses metadata and reflection to deserialize unverified data from an external location (like an XMLHttpRequest request) to an instance of a class with a provided decorator config pattern. Data mapping can be applied to conform data to your classes and fallback values must be given in case data is missing. Logging can occur in various ways to report any missing data where needed.
+TS-Deserializable is a typescript library that uses metadata and reflection to deserialize unverified data from an external location (like an XMLHttpRequest request) to an instance of a class with a provided decorator config pattern. Data mapping can be applied to conform data to your classes and fallback values must be given in case data is missing. Logging can occur in various ways to report any missing data where needed.
 
 ## Getting Started
 
