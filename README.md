@@ -10,6 +10,7 @@ Decorator pattern for deserializing unverified data to an instance of a class.
 
 ## Table of contents
 * [Installation](#installation)
+* [Description](#description)
 * [Getting Started](#getting-started)
 * [API](#api)
 
@@ -18,9 +19,11 @@ Decorator pattern for deserializing unverified data to an instance of a class.
 
 `coming soon...`
 
-## Getting Started
+## Description
 
-TS-Deserializable is a decorator pattern that uses metadata and reflection to deserialize unverified data from an external location, like a XMLHttpRequest request, to an instance of a class. Data mapping can be applied to conform data to your classes and fallback values can be given incase data is missing. Logging can occur in various ways to report any missing data where needed.
+TS-Deserializable is library that uses metadata and reflection to deserialize unverified data from an external location (like an XMLHttpRequest request) to an instance of a class with a provided decorator config pattern. Data mapping can be applied to conform data to your classes and fallback values must be given in case data is missing. Logging can occur in various ways to report any missing data where needed.
+
+## Getting Started
 
 To begin, define a log level of either `ignore`, `warn`, `error`, or `throw` with `@DsClass()`. Then, define how data will map to a classes' properties with `@DsProp()`. 
 
