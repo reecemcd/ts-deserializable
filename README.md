@@ -137,10 +137,10 @@ Class operators simply set the log level for any DsProps applied to any child pr
 
 | Operator | Description |
 |----------|-------------|
-| `ignore()` | Any undefined values or failed validations will not be logged for this class. |
-| `warn()` | Any undefined values or failed validations will be logged as warnings. |
-| `error()` | Any undefined values or failed validations will be logged as errors. |
-| `throw(errorCtor = Error)` | Any undefined values or failed validations will throw the provided Error. |
+| `ignore()` | Any inaccessible props, undefined values, or failed validations will not be logged for this class. |
+| `warn()` | Any inaccessible props, undefined values, or failed validations will be logged as warnings. |
+| `error()` | Any inaccessible props, undefined values, or failed validations will be logged as errors. |
+| `throw(errorCtor = Error)` | Any inaccessible props, undefined values, or failed validations will throw the provided Error. |
 
 ### `@DsProp()`
 > Property Decorator
@@ -163,7 +163,7 @@ Resolver operators can be used to resolve structural differences between the obj
 | Operator | Description |
 |----------|-------------|
 | `resolve(func: Function)` | The provided function is passed the full object being deserialized. Whatever value the function returns is what gets passed along the chain. |
-| `dotResolve(propPath: string | string[])` | The propPath param is a "." delimited string or array of prop keys that represents a series of nested props. dotResolve automatically resolves to the value of the prop at the specified location. If the prop does not exist undefined is passed down the chain. |
+| `dotResolve(propPath: string \| string[])` | The propPath param is a "." delimited string or array of prop keys that represents a series of nested props. dotResolve automatically resolves to the value of the prop at the specified location. If the prop does not exist the issue is logged and the fallback value is returned. |
 
 #### Validator Operators
 
@@ -171,7 +171,7 @@ Validator operators can be used to catch when certain conditions are not met.
 
 | Operator | Description |
 |----------|-------------|
-| `validate(func: Function)` | Marks the property as invalid if the provided function returns false |
+| `validate(func: Function)` | Marks the property as invalid if the provided function returns a falsey value |
 | `validateString()` | Marks the property as invalid if its `typeof` result does not equal `"string"` |
 | `validateNumber()` | Marks the property as invalid if its `typeof` result does not equal `"number"` |
 | `validateBoolean()` | Marks the property as invalid if its `typeof` result does not equal `"boolean"` |
