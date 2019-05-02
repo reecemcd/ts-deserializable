@@ -52,8 +52,9 @@ class User extends Deserializable {
 
 const user = new User().deserialize({});
 // user == { name: '', email: '' }
+```
 
-
+```Typescript
 /* Map examples */
 @DsClass().warn()
 class Group extends Deserializable {
@@ -67,8 +68,9 @@ class Group extends Deserializable {
 
 const group = new Group().deserialize({ title: 'My Group' });
 // group == { title: 'MyGroup!', users = [ {name: '', email: ''}, { name: '', email: ''} ]}
+```
 
-
+```Typescript
 /* Resolver examples */
 @DsClass().error()
 class MyFormData extends Deserializable {
@@ -92,8 +94,9 @@ const formData = new MyFormData().deserialize({
   extras: { optionC: 'C', optionD: 'D' }
 });
 // formData == { option1: 'A', option2: 'B', option3: 'C', option4: 'D' }
+```
 
-
+```Typescript
 /* Basic Chaining Example */
 @DsClass().warn()
 class NumberStringToNumber extends Deserializable {
@@ -108,7 +111,6 @@ class NumberStringToNumber extends Deserializable {
 
 const result = new BasicChain().deserialize({ someStrings: { thisString: '42' } });
 // result = { val: 42 }
-
 ```
 
 ## API
