@@ -151,7 +151,7 @@ There are three types of property operators `basic`, `resolver`, and `validator`
 
 | Operator | Description |
 |----------|-------------|
-| `fb(fallbackValue: any | Function = undefined)` | The fallback value is returned anytime a prop is not accessible, is undefined, or does not pass validation. If a function is provided, it will be evaluated every time a fallback value is needed. Whatever value a fallback function returns will be passed as the fallback value. |
+| `fb(fallbackValue: any \| Function = undefined)` | The fallback value is returned anytime a prop is not accessible, is undefined, or does not pass validation. If a function is provided, it will be evaluated every time a fallback value is needed. Whatever value a fallback function returns will be passed as the fallback value. |
 | `tap(func: Function)` | The provided function is called every time an instance of the class is initialized. |
 | `map(func: Function)` | The provided function is passed the value of the matching property from the object being deserialized or the value passed down the chain. If this property does not exist on that object, the event is logged and the fallback value is returned. |
 | `mapTo(ctor: Constructor)` | Data for the matching property or passed value is mapped to the deserialize function of the provided constructor. The `mapTo` operator can only be used with other classes implementing the deserializable pattern; they do not need to be using `@DsClass` and `@DsProp` decorators. |
