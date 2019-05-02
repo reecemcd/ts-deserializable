@@ -1,4 +1,5 @@
 import { Deserializable, DsClass, DsProp } from "..";
+import { validate } from "@babel/types";
 
 let uId = 0;
 
@@ -46,6 +47,51 @@ class MyFormData extends Deserializable {
   option4!: string;
 }
 
+// Validator examples
+@DsClass().warn()
+class ValidatorTrue extends Deserializable {
+
+  @DsProp().validate(() => true).fb('')
+  prop!: string;
+}
+
+@DsClass().warn()
+class ValidatorFalse extends Deserializable {
+
+  @DsProp().validate(() => false).fb('')
+  prop!: string;
+}
+
+@DsClass().warn()
+class ValidatorString extends Deserializable {
+
+  @DsProp().validateString().fb('')
+  prop!: string;
+}
+
+@DsClass().warn()
+class ValidatorNumber extends Deserializable {
+
+  @DsProp().validateNumber().fb(0)
+  prop!: number;
+}
+
+@DsClass().warn()
+class ValidatorBoolean extends Deserializable {
+
+  @DsProp().validateBoolean().fb(false)
+  prop!: boolean;
+}
+
+@DsClass().warn()
+class ValidatorArray extends Deserializable {
+
+  @DsProp().validateArray().fb([])
+  prop!: boolean;
+}
+
+
+// Logging examples
 @DsClass().warn()
 class WarnExample extends Deserializable {
 
@@ -78,7 +124,20 @@ class ThrowFooExample extends Deserializable {
   example!: number;
 }
 
-test('Fallbacks', async () => {
+
+// Chaining examples
+@DsClass().warn()
+class BasicChain extends Deserializable {
+
+  @DsProp()
+    .dotResolve('a.b')
+    .map((val) => parseInt(val))
+    .validateNumber()
+    .fb(0)
+  val!: number;
+}
+
+test('Fallbacks', () => {
   const t1: User = new User().deserialize({ 
     name: 'Bob',
     id: 10
@@ -94,7 +153,7 @@ test('Fallbacks', async () => {
   expect(t2.other).toBeUndefined();
 });
 
-test('Maps', async () => {
+test('Maps', () => {
   const t: Group = new Group().deserialize({ 
     title: 'My Users', 
     users: [new User(), new User()]
@@ -108,7 +167,7 @@ test('Maps', async () => {
   expect(t.users[1].id).toBe(4);
 });
 
-test('Resolves', async () => {
+test('Resolves', () => {
   const t: MyFormData = new MyFormData().deserialize({
     optionA: 'A',
     optionB: 'B',
@@ -124,7 +183,56 @@ test('Resolves', async () => {
   expect(t.option4).toBe('D');
 });
 
-test('Reporter', async () => {
+describe('Validators', () => {
+
+  test('Basic', () => {
+    let warnSpy = jest.spyOn(console, 'warn');
+    const t1 = new ValidatorTrue().deserialize({ prop: 'A' });
+    expect(warnSpy).not.toHaveBeenCalled();
+    const t2 = new ValidatorFalse().deserialize({ prop: 'A' });
+    expect(warnSpy).toHaveBeenCalled();
+    warnSpy.mockClear();
+  });
+  
+  test('String', () => {
+    let warnSpy = jest.spyOn(console, 'warn');
+    const t1 = new ValidatorString().deserialize({ prop: 'A' });
+    expect(warnSpy).not.toHaveBeenCalled();
+    const t2 = new ValidatorString().deserialize({ prop: 0 });
+    expect(warnSpy).toHaveBeenCalled();
+    warnSpy.mockClear();
+  });
+
+  test('Number', () => {
+    let warnSpy = jest.spyOn(console, 'warn');
+    const t1 = new ValidatorNumber().deserialize({ prop: 0 });
+    expect(warnSpy).not.toHaveBeenCalled();
+    const t2 = new ValidatorNumber().deserialize({ prop: 'A' });
+    expect(warnSpy).toHaveBeenCalled();
+    warnSpy.mockClear();
+  });
+
+  test('Boolean', () => {
+    let warnSpy = jest.spyOn(console, 'warn');
+    const t1 = new ValidatorBoolean().deserialize({ prop: true });
+    expect(warnSpy).not.toHaveBeenCalled();
+    const t2 = new ValidatorBoolean().deserialize({ prop: 'A' });
+    expect(warnSpy).toHaveBeenCalled();
+    warnSpy.mockClear();
+  });
+
+  test('Array', () => {
+    let warnSpy = jest.spyOn(console, 'warn');
+    const t1 = new ValidatorArray().deserialize({ prop: [] });
+    expect(warnSpy).not.toHaveBeenCalled();
+    const t2 = new ValidatorArray().deserialize({ prop: 'A' });
+    expect(warnSpy).toHaveBeenCalled();
+    warnSpy.mockClear();
+  });
+  
+});
+
+test('Reporter', () => {
   let warnSpy = jest.spyOn(console, 'warn');
   let errorSpy = jest.spyOn(console, 'error');
 
@@ -141,4 +249,22 @@ test('Reporter', async () => {
   expect(() => { 
     new ThrowFooExample().deserialize({})
   }).toThrowError();
+
+  warnSpy.mockClear();
+  errorSpy.mockClear();
+});
+
+test('Chaining', () => {
+  let warnSpy = jest.spyOn(console, 'warn');
+
+  const t1 = new BasicChain().deserialize({ a: { b: '42' } });
+
+  expect(warnSpy).not.toHaveBeenCalled();
+  expect(t1.val).toBe(42);
+  warnSpy.mockClear();
+
+  const t2 = new BasicChain().deserialize({});
+
+  expect(warnSpy).toHaveBeenCalled();
+  expect(t2.val).toBe(0);
 });

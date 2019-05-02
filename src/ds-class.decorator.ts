@@ -10,6 +10,12 @@ class DsClassBuilder {
   public error = () => this.decoratorFactory(ReportType.Error);
   public throw = (errorCtor: any = Error) => this.decoratorFactory(ReportType.Throw, errorCtor);
 
+  private getFallback = (fallback) => (
+    (typeof fallback === 'function')
+      ? fallback()
+      : fallback
+  );
+
   private decoratorFactory = (reportType: ReportType, errorCtor = Error) => (
     <TFunction extends Function>(target: TFunction) => {
       // save a reference to the original constructor
@@ -41,25 +47,50 @@ class DsClassBuilder {
               ? obj[key] 
               : undefined;
 
+            // the breaker will stop the evaluation chain and 
+            // instead force us to return the fallback value.
+            // TODO: how this is handled can be improved for better logging and debugging
+            let breaker = false;
+            let invalid = false;
+            let invalidWith: any;
+
             // apply operations
             if (operations[key]) {
               value = operations[key].reduce((val, operation: DsOperation) => {
+                if (breaker) {
+                  return val
+                }
                 switch(operation.type) {
+                  case DsOperationType.Validator:
+                    if (!operation.func(val)) {
+                      breaker = true;
+                      invalid = true;
+                      invalidWith = val;
+                    }
+                    return val;
                   case DsOperationType.Resolver:
-                    return operation.func(obj);
+                    let res = operation.func(obj);
+                    breaker = (res === undefined);
+                    return res;
                   case DsOperationType.Operator:
                   default:
-                    return operation.func(val);
+                    let opRes = operation.func(val);
+                    breaker = (opRes === undefined);
+                    return opRes;
                 }
               }, value);
             }
 
-            // mark if value does not exist
-            if (value === undefined) {
-              value = (typeof attribute.fallback === 'function')
-                ? attribute.fallback()
-                : attribute.fallback;
-                reporter.mark(key, undefined, value);
+            // if breaker was tripped log invalid
+            if (breaker && invalid) {
+              value = this.getFallback(attribute.fallback);
+              reporter.markInvalid(key, invalidWith, value);
+            }
+
+            // mark if breaker was tripped or value does not exist
+            else if (breaker || value === undefined) {
+              value = this.getFallback(attribute.fallback);
+              reporter.mark(key, undefined, value);
             }
 
             ret[key] = value;

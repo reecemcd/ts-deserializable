@@ -8,7 +8,8 @@ export interface DsOperation {
 
 export enum DsOperationType {
   Operator = 'OPERATOR',
-  Resolver = 'RESOLVER'
+  Resolver = 'RESOLVER',
+  Validator = 'VALIDATOR'
 }
 
 const getNestedPropValue = (obj, propPath, separator = '.') => {
@@ -24,6 +25,12 @@ class DsPropBuilder {
     this.operations = [ ...this.operations, operation ];
   }
 
+  // Basic Operators
+
+  /**
+   * 
+   * @param func 
+   */
   public tap(func: Function) {
     this.addOperation({ 
       func: (obj) => { func(); return obj; },
@@ -32,6 +39,10 @@ class DsPropBuilder {
     return this;
   }
 
+  /**
+   * 
+   * @param func 
+   */
   public map(func: Function) {
     this.addOperation({ 
       func: func,
@@ -40,6 +51,10 @@ class DsPropBuilder {
     return this;
   }
 
+  /**
+   * 
+   * @param ctor 
+   */
   public mapTo(ctor: any) {
     this.addOperation({ 
       func: (obj) => obj.map(child => new ctor().deserialize(child)),
@@ -48,6 +63,13 @@ class DsPropBuilder {
     return this;
   }
 
+
+  // Resolvers
+
+  /**
+   * 
+   * @param func 
+   */
   public resolve(func: Function) {
     this.addOperation({
       func: func,
@@ -56,6 +78,10 @@ class DsPropBuilder {
     return this;
   }
 
+  /**
+   * 
+   * @param propPath 
+   */
   public dotResolve(propPath: string | string[]) {
     this.addOperation({
       func: (obj) => getNestedPropValue(obj, propPath),
@@ -64,6 +90,54 @@ class DsPropBuilder {
     return this;
   }
 
+  // Validators
+
+  public validate(func: Function) {
+    this.addOperation({ 
+      func: func,
+      type: DsOperationType.Validator
+    });
+    return this;
+  }
+
+  public validateString() {
+    this.addOperation({
+      func: (val) => (typeof val === 'string'),
+      type: DsOperationType.Validator
+    });
+    return this;
+  }
+
+  public validateNumber() {
+    this.addOperation({
+      func: (val) => (typeof val === 'number'),
+      type: DsOperationType.Validator
+    });
+    return this;
+  }
+
+  public validateBoolean() {
+    this.addOperation({
+      func: (val) => (typeof val === 'boolean'),
+      type: DsOperationType.Validator
+    });
+    return this;
+  }
+
+  public validateArray() {
+    this.addOperation({
+      func: (val) => Array.isArray(val),
+      type: DsOperationType.Validator
+    });
+    return this;
+  }
+
+  // Build
+
+  /**
+   * 
+   * @param fallbackValue 
+   */
   public fb(fallbackValue: any = undefined) {
     return (target: any, key: string) => {
       const type = Reflect.getMetadata("design:type", target, key);

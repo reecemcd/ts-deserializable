@@ -4,6 +4,9 @@
   "description": "Decorator pattern for deserializing unverified data to an instance of a class in typescript.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "keywords": [ "deserializable", "ts", "typescript", "deserialize", "json", "rest", "angular", "data", "api", "types", "map" ],
+  "author": "Reece McDonald",
+  "license": "MIT",
   "scripts": {
     "test": "jest",
     "test:coverage": "jest --coverage",
@@ -12,8 +15,6 @@
     "pack": "cd dist/ && npm pack",
     "package": "npm run build && npm run copy-files && npm run pack"
   },
-  "author": "Reece McDonald",
-  "license": "MIT",
   "dependencies": {
     "reflect-metadata": "^0.1.13",
     "typescript": "^3.4.4"
