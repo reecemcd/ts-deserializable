@@ -5,6 +5,8 @@ Decorator pattern for deserializing unverified data to an instance of a class in
 </p>
 
 <p align="center">
+    <a href="https://badge.fury.io/js/ts-deserializable" target="_blank"><img src="https://badge.fury.io/js/ts-deserializable.svg" alt="npm version" height="18"></a>
+    <a href="https://npmjs.org/ts-deserializable" target="_blank"><img src="https://img.shields.io/npm/dt/ts-deserializable.svg" alt="npm downloads" ></a>
     <a href="https://github.com/reecemcd/ts-deserializable/blob/master/LICENSE" target="_blank"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="mit license" height="18"></a>
     <a href="https://circleci.com/gh/reecemcd/ts-deserializable" target="_blank"><img src="https://circleci.com/gh/reecemcd/ts-deserializable.svg?style=svg" alt="mit license" height="18"></a>
 </p>
@@ -18,7 +20,7 @@ Decorator pattern for deserializing unverified data to an instance of a class in
 
 ## Installation
 
-`coming soon...`
+`npm install ts-deserializable --save`
 
 ## Description
 
@@ -174,7 +176,7 @@ Validator operators can be used to catch when certain conditions are not met.
 | `validateArray()` | Marks the property as invalid if it is not an array |
 
 
-#### TODO
+#### TODO:
 
 * Create more validators
 * Create more operators for common mapping use cases
