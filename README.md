@@ -109,7 +109,7 @@ class NumberStringToNumber extends Deserializable {
   val!: number;
 }
 
-const result = new BasicChain().deserialize({ someStrings: { thisString: '42' } });
+const result = new NumberStringToNumber().deserialize({ someStrings: { thisString: '42' } });
 // result = { val: 42 }
 ```
 
