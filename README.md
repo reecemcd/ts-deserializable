@@ -109,7 +109,7 @@ class NumberStringToNumber extends Deserializable<NumberStringToNumber> {
   val!: number;
 }
 
-const result = new BasicChain().deserialize({ someStrings: { thisString: '42' } });
+const result = new NumberStringToNumber().deserialize({ someStrings: { thisString: '42' } });
 // result = { val: 42 }
 ```
 
@@ -137,10 +137,10 @@ Class operators simply set the log level for any DsProps applied to any child pr
 
 | Operator | Description |
 |----------|-------------|
-| `ignore()` | Any undefined values or failed validations will not be logged for this class. |
-| `warn()` | Any undefined values or failed validations will be logged as warnings. |
-| `error()` | Any undefined values or failed validations will be logged as errors. |
-| `throw(errorCtor = Error)` | Any undefined values or failed validations will throw the provided Error. |
+| `ignore()` | Any inaccessible props, undefined values, or failed validations will not be logged for this class. |
+| `warn()` | Any inaccessible props, undefined values, or failed validations will be logged as warnings. |
+| `error()` | Any inaccessible props, undefined values, or failed validations will be logged as errors. |
+| `throw(errorCtor = Error)` | Any inaccessible props, undefined values, or failed validations will throw the provided Error. |
 
 ### `@DsProp()`
 > Property Decorator
@@ -151,7 +151,7 @@ There are three types of property operators `basic`, `resolver`, and `validator`
 
 | Operator | Description |
 |----------|-------------|
-| `fb(fallbackValue: any | Function = undefined)` | The fallback value is returned anytime a prop is not accessible, is undefined, or does not pass validation. If a function is provided, it will be evaluated every time a fallback value is needed. Whatever value a fallback function returns will be passed as the fallback value. |
+| `fb(fallbackValue: any \| Function = undefined)` | The fallback value is returned anytime a prop is not accessible, is undefined, or does not pass validation. If a function is provided, it will be evaluated every time a fallback value is needed. Whatever value a fallback function returns will be passed as the fallback value. |
 | `tap(func: Function)` | The provided function is called every time an instance of the class is initialized. |
 | `map(func: Function)` | The provided function is passed the value of the matching property from the object being deserialized or the value passed down the chain. If this property does not exist on that object, the event is logged and the fallback value is returned. |
 | `mapTo(ctor: Constructor)` | Data for the matching property or passed value is mapped to the deserialize function of the provided constructor. The `mapToArray` operator can only be used with other classes implementing the deserializable pattern; they do not need to be using `@DsClass` and `@DsProp` decorators. |
@@ -164,7 +164,7 @@ Resolver operators can be used to resolve structural differences between the obj
 | Operator | Description |
 |----------|-------------|
 | `resolve(func: Function)` | The provided function is passed the full object being deserialized. Whatever value the function returns is what gets passed along the chain. |
-| `dotResolve(propPath: string | string[])` | The propPath param is a "." delimited string or array of prop keys that represents a series of nested props. dotResolve automatically resolves to the value of the prop at the specified location. If the prop does not exist undefined is passed down the chain. |
+| `dotResolve(propPath: string \| string[])` | The propPath param is a "." delimited string or array of prop keys that represents a series of nested props. dotResolve automatically resolves to the value of the prop at the specified location. If the prop does not exist the issue is logged and the fallback value is returned. |
 
 #### Validator Operators
 
@@ -172,7 +172,7 @@ Validator operators can be used to catch when certain conditions are not met.
 
 | Operator | Description |
 |----------|-------------|
-| `validate(func: Function)` | Marks the property as invalid if the provided function returns false |
+| `validate(func: Function)` | Marks the property as invalid if the provided function returns a falsey value |
 | `validateString()` | Marks the property as invalid if its `typeof` result does not equal `"string"` |
 | `validateNumber()` | Marks the property as invalid if its `typeof` result does not equal `"number"` |
 | `validateBoolean()` | Marks the property as invalid if its `typeof` result does not equal `"boolean"` |
