@@ -1,6 +1,6 @@
 {
   "name": "ts-deserializable",
-  "version": "1.0.0",
+  "version": "1.1.1",
   "description": "Decorator pattern for deserializing unverified data to an instance of a class in typescript.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

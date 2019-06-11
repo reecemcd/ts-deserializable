@@ -39,7 +39,7 @@ To begin, define a log level of either `ignore`, `warn`, `error`, or `throw` wit
 ```Typescript
 /* Basic fallback example */
 @DsClass().ignore()
-class User extends Deserializable {
+class User extends Deserializable<User> {
 
   @DsProp().fb('')
   name: string;
@@ -57,12 +57,12 @@ const user = new User().deserialize({});
 ```Typescript
 /* Map examples */
 @DsClass().warn()
-class Group extends Deserializable {
+class Group extends Deserializable<Group> {
 
   @DsProp().map((s) => s + '!').fb('Test')
   title: string;
 
-  @DsProp().mapTo(User).fb([])
+  @DsProp().mapToArray(User).fb([])
   users: User[];
 }
 
@@ -73,7 +73,7 @@ const group = new Group().deserialize({ title: 'My Group' });
 ```Typescript
 /* Resolver examples */
 @DsClass().error()
-class MyFormData extends Deserializable {
+class MyFormData extends Deserializable<MyFormData> {
 
   @DsProp().resolve(obj => obj.optionA).fb('')
   option1: string;
@@ -99,7 +99,7 @@ const formData = new MyFormData().deserialize({
 ```Typescript
 /* Basic Chaining Example */
 @DsClass().warn()
-class NumberStringToNumber extends Deserializable {
+class NumberStringToNumber extends Deserializable<NumberStringToNumber> {
 
   @DsProp()
     .dotResolve('someStrings.thisString')
@@ -123,9 +123,9 @@ const result = new BasicChain().deserialize({ someStrings: { thisString: '42' } 
 This class can also be extended or implemented without the use of ts-deserializable decorators and will still be compatible with classes that do.
 
 ```Typescript
-class User extends Deserializable { ... }
+class User extends Deserializable<User> { ... }
 
-class User implements Deserializable { 
+class User implements Deserializable<User> { 
   deserialize(obj: any): any { ... }
 }
 ```
@@ -154,7 +154,8 @@ There are three types of property operators `basic`, `resolver`, and `validator`
 | `fb(fallbackValue: any | Function = undefined)` | The fallback value is returned anytime a prop is not accessible, is undefined, or does not pass validation. If a function is provided, it will be evaluated every time a fallback value is needed. Whatever value a fallback function returns will be passed as the fallback value. |
 | `tap(func: Function)` | The provided function is called every time an instance of the class is initialized. |
 | `map(func: Function)` | The provided function is passed the value of the matching property from the object being deserialized or the value passed down the chain. If this property does not exist on that object, the event is logged and the fallback value is returned. |
-| `mapTo(ctor: Constructor)` | Data for the matching property or passed value is mapped to the deserialize function of the provided constructor. The `mapTo` operator can only be used with other classes implementing the deserializable pattern; they do not need to be using `@DsClass` and `@DsProp` decorators. |
+| `mapTo(ctor: Constructor)` | Data for the matching property or passed value is mapped to the deserialize function of the provided constructor. The `mapToArray` operator can only be used with other classes implementing the deserializable pattern; they do not need to be using `@DsClass` and `@DsProp` decorators. |
+| `mapToArray(ctor: Constructor)` | Each data item in an array for the matching property or passed array value is mapped to the deserialize function of the provided constructor. The `mapToArray` operator can only be used with other classes implementing the deserializable pattern; they do not need to be using `@DsClass` and `@DsProp` decorators. |
 
 #### Resolver Operators
 

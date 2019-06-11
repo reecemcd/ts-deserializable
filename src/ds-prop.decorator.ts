@@ -56,6 +56,18 @@ class DsPropBuilder {
    * @param ctor 
    */
   public mapTo(ctor: any) {
+    this.addOperation({
+      func: (obj) => new ctor().deserialize(obj),
+      type: DsOperationType.Operator
+    });
+    return this;
+  }
+
+  /**
+   * 
+   * @param ctor 
+   */
+  public mapToArray(ctor: any) {
     this.addOperation({ 
       func: (obj) => obj.map(child => new ctor().deserialize(child)),
       type: DsOperationType.Operator

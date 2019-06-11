@@ -5,7 +5,7 @@ let uId = 0;
 
 // Basic fallback examples w/tap
 @DsClass().ignore()
-class User extends Deserializable {
+class User extends Deserializable<User> {
 
   @DsProp().fb('')
   name!: string;
@@ -21,18 +21,21 @@ class User extends Deserializable {
 
 // Map examples
 @DsClass().ignore()
-class Group extends Deserializable {
+class Group extends Deserializable<Group> {
 
   @DsProp().map((s) => s + '!').fb('Test')
   title!: string;
 
-  @DsProp().mapTo(User).fb([])
+  @DsProp().mapTo(User).fb({})
+  user!: User;
+
+  @DsProp().mapToArray(User).fb([])
   users!: User[];
 }
 
 // Resolver examples
 @DsClass().ignore()
-class MyFormData extends Deserializable {
+class MyFormData extends Deserializable<MyFormData> {
 
   @DsProp().resolve(obj => obj.optionA).fb('')
   option1!: string;
@@ -49,42 +52,42 @@ class MyFormData extends Deserializable {
 
 // Validator examples
 @DsClass().warn()
-class ValidatorTrue extends Deserializable {
+class ValidatorTrue extends Deserializable<ValidatorTrue> {
 
   @DsProp().validate(() => true).fb('')
   prop!: string;
 }
 
 @DsClass().warn()
-class ValidatorFalse extends Deserializable {
+class ValidatorFalse extends Deserializable<ValidatorFalse> {
 
   @DsProp().validate(() => false).fb('')
   prop!: string;
 }
 
 @DsClass().warn()
-class ValidatorString extends Deserializable {
+class ValidatorString extends Deserializable<ValidatorString> {
 
   @DsProp().validateString().fb('')
   prop!: string;
 }
 
 @DsClass().warn()
-class ValidatorNumber extends Deserializable {
+class ValidatorNumber extends Deserializable<ValidatorNumber> {
 
   @DsProp().validateNumber().fb(0)
   prop!: number;
 }
 
 @DsClass().warn()
-class ValidatorBoolean extends Deserializable {
+class ValidatorBoolean extends Deserializable<ValidatorBoolean> {
 
   @DsProp().validateBoolean().fb(false)
   prop!: boolean;
 }
 
 @DsClass().warn()
-class ValidatorArray extends Deserializable {
+class ValidatorArray extends Deserializable<ValidatorArray> {
 
   @DsProp().validateArray().fb([])
   prop!: boolean;
@@ -93,21 +96,21 @@ class ValidatorArray extends Deserializable {
 
 // Logging examples
 @DsClass().warn()
-class WarnExample extends Deserializable {
+class WarnExample extends Deserializable<WarnExample> {
 
   @DsProp().fb(0)
   example!: number;
 }
 
 @DsClass().error()
-class ErrorExample extends Deserializable {
+class ErrorExample extends Deserializable<ErrorExample> {
 
   @DsProp().fb(0)
   example!: number;
 }
 
 @DsClass().throw()
-class ThrowExample extends Deserializable {
+class ThrowExample extends Deserializable<ThrowExample> {
 
   @DsProp().fb(0)
   example!: number;
@@ -118,7 +121,7 @@ class FooError extends Error {
 }
 
 @DsClass().throw(FooError)
-class ThrowFooExample extends Deserializable {
+class ThrowFooExample extends Deserializable<ThrowFooExample> {
 
   @DsProp().fb(0)
   example!: number;
@@ -127,7 +130,7 @@ class ThrowFooExample extends Deserializable {
 
 // Chaining examples
 @DsClass().warn()
-class BasicChain extends Deserializable {
+class BasicChain extends Deserializable<BasicChain> {
 
   @DsProp()
     .dotResolve('a.b')
@@ -138,12 +141,12 @@ class BasicChain extends Deserializable {
 }
 
 test('Fallbacks', () => {
-  const t1: User = new User().deserialize({ 
+  const t1 = new User().deserialize({ 
     name: 'Bob',
     id: 10
   });
 
-  const t2: User = new User().deserialize({});
+  const t2 = new User().deserialize({});
 
   expect(t1.name).toBe('Bob');
   expect(t1.id).toBe(10);
@@ -155,16 +158,19 @@ test('Fallbacks', () => {
 
 test('Maps', () => {
   const t: Group = new Group().deserialize({ 
-    title: 'My Users', 
+    title: 'My Users',
+    user: new User(),
     users: [new User(), new User()]
   });
 
   expect(t.title).toBe('My Users!');
   expect(Array.isArray(t.users)).toBe(true);
+  expect(t.user.name).toBe('');
+  expect(t.user.id).toBe(3);
   expect(t.users[0].name).toBe('');
   expect(t.users[1].name).toBe('');
-  expect(t.users[0].id).toBe(3);
-  expect(t.users[1].id).toBe(4);
+  expect(t.users[0].id).toBe(4);
+  expect(t.users[1].id).toBe(5);
 });
 
 test('Resolves', () => {
