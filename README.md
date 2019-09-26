@@ -1,3 +1,5 @@
+<strong>[!] This library is no longer maintained as it is not AOT friendly. Please check out [ts-deserializer](https://github.com/reecemcd/ts-deserializer) instead.</strong>
+
 <h1 align="center">TS Deserializable</h1>
 
 <p align="center">
